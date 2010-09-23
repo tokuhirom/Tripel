@@ -27,11 +27,20 @@ sub import {
             path => [ File::Spec->catfile($app_path, 'tmpl') ],
             module => ['Text::Xslate::Bridge::TT2Like'],
         );
+        my $config = do {
+            my $env = $ENV{PLACK_ENV} || 'development';
+            my $conf = File::Spec->catfile($app_path, 'config', "$env.pl");
+            if (-f $conf) {
+                do $conf;
+            } else {
+                +{ }; # empty configuration
+            }
+        };
 
         sub {
             my $env = shift;
             if ( my $route = $caller->router->match($env) ) {
-                my $c = Tripel::Context->new(env => $env, 'caller' => $caller, app_path => $app_path);
+                my $c = Tripel::Context->new(env => $env, 'caller' => $caller, app_path => $app_path, config => $config);
                 my $res = $route->{code}->($c, $route);
                 return $res->finalize();
             }
@@ -56,7 +65,8 @@ has req => (
 );
 has caller => (is => 'ro', isa => 'Str', required => 1);
 has app_path => (is => 'ro', isa => 'Str', required => 1);
-has fdat => (is => 'rw', isa => 'Any');
+has fdat => (is => 'rw', isa => 'Any'); # XXX maybe deprecated
+has config => (is => 'ro', isa => 'HashRef', required => 1);
 
 sub xslate { shift->caller->xslate }
 
