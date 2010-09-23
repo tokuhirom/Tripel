@@ -93,6 +93,28 @@ use parent qw/Plack::Request/;
 package Tripel::Response;
 use parent qw/Plack::Response/;
 1;
+__END__
+
+=head1 DESCRIPTION
+
+This is one file tiny web application framework.
+
+=head1 CONCEPT OF Tripel
+
+=over 4
+
+=item Depend to Xslate
+
+tokuhirom loves Xslate + TTerse syntax
+
+=item One file framework
+
+like web.py
+
+=item Simple and Thin
+
+=back
+
 =head1 AUTHOR
 
 Tokuhiro Matsuno(tokuhirom)

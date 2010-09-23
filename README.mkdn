@@ -1,0 +1,26 @@
+# DESCRIPTION
+
+This is one file tiny web application framework.
+
+# CONCEPT OF Tripel
+
+- Depend to Xslate
+
+tokuhirom loves Xslate + TTerse syntax
+
+- One file framework
+
+like web.py
+
+- Simple and Thin
+
+# AUTHOR
+
+Tokuhiro Matsuno(tokuhirom)
+
+# LICENSE
+
+Copyright (c) 2010, Tokuhiro Matsuno(tokuhirom). All rights reserved.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
