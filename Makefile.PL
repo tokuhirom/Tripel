@@ -11,4 +11,6 @@ requires 'Mouse';
 requires 'HTML::FillInForm::Lite';
 requires 'Plack';
 
+test_requires 'Test::More' => 0.96;
+
 WriteAll;
