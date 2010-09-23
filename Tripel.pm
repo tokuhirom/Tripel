@@ -57,15 +57,15 @@ use Mouse;
 use HTML::FillInForm::Lite;
 use Encode qw/encode_utf8/;
 
-has env => ( is => 'ro', isa => 'HashRef', required => 1 );
 has req => (
     is      => 'ro',
     isa     => 'Tripel::Request',
     default => sub { Tripel::Request->new( $_[0]->env ) }
 );
-has caller => (is => 'ro', isa => 'Str', required => 1);
-has app_path => (is => 'ro', isa => 'Str', required => 1);
-has config => (is => 'ro', isa => 'HashRef', required => 1);
+has env      => ( is => 'ro', isa => 'HashRef', required => 1 );
+has caller   => ( is => 'ro', isa => 'Str',     required => 1 );
+has app_path => ( is => 'ro', isa => 'Str',     required => 1 );
+has config   => ( is => 'ro', isa => 'HashRef', required => 1 );
 
 sub xslate { shift->caller->xslate }
 
