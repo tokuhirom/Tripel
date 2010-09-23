@@ -65,7 +65,6 @@ has req => (
 );
 has caller => (is => 'ro', isa => 'Str', required => 1);
 has app_path => (is => 'ro', isa => 'Str', required => 1);
-has fdat => (is => 'rw', isa => 'Any'); # XXX maybe deprecated
 has config => (is => 'ro', isa => 'HashRef', required => 1);
 
 sub xslate { shift->caller->xslate }
