@@ -91,6 +91,28 @@ __PACKAGE__->meta->make_immutable;
 package Tripel::Request;
 use parent qw/Plack::Request/;
 
+sub body_parameters {
+    my ($self) = @_;
+    $self->{'amon2.body_parameters'} ||= $self->_decode_parameters($self->SUPER::body_parameters());
+}
+
+sub query_parameters {
+    my ($self) = @_;
+    $self->{'amon2.query_parameters'} ||= $self->_decode_parameters($self->SUPER::query_parameters());
+}
+
+my $encoding = Encode::find_encoding('utf-8');
+sub _decode_parameters {
+    my ($self, $stuff) = @_;
+
+    my @flatten = $stuff->flatten();
+    my @decoded;
+    while ( my ($k, $v) = splice @flatten, 0, 2 ) {
+        push @decoded, Encode::decode($encoding, $k), Encode::decode($encoding, $v);
+    }
+    return Hash::MultiValue->new(@decoded);
+}
+
 package Tripel::Response;
 use parent qw/Plack::Response/;
 1;
