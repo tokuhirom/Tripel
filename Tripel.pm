@@ -24,7 +24,8 @@ sub import {
         # setup
         $xslates{$caller} = Text::Xslate->new(
             syntax => 'TTerse',
-            path => [ File::Spec->catfile($app_path, 'tmpl') ]
+            path => [ File::Spec->catfile($app_path, 'tmpl') ],
+            module => ['Text::Xslate::Bridge::TT2Like'],
         );
 
         sub {
