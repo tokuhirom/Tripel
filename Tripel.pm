@@ -10,6 +10,8 @@ use 5.008001;
 
 our $VERSION='0.03';
 
+our $CONTEXT;
+
 sub import {
     my $caller = caller(0);
     my $app_path = dirname([caller(0)]->[1]);
@@ -39,6 +41,7 @@ sub import {
             my $env = shift;
             if ( my $route = $caller->router->match($env) ) {
                 my $c = Tripel::Context->new(env => $env, 'caller' => $caller, app_path => $app_path, config => $config, tmpl => $xslate);
+                local $CONTEXT = $c;
                 my $res = $route->{code}->($c, $route);
                 return $res->finalize();
             }
