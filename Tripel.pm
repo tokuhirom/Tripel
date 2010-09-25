@@ -8,7 +8,7 @@ use File::Basename;
 use File::Spec;
 use 5.008001;
 
-our $VERSION='0.02';
+our $VERSION='0.03';
 
 sub import {
     my $caller = caller(0);
