@@ -13,16 +13,14 @@ our $VERSION='0.02';
 sub import {
     my $caller = caller(0);
     my $app_path = dirname([caller(0)]->[1]);
-    my %xslates;
 
     Router::Simple::Sinatraish->export_to_level(1);
 
     no strict 'refs';
-    *{"${caller}::xslate"}       = sub { $xslates{$caller} };
     *{"${caller}::res"}          = sub { Tripel::Response->new(@_) };
     *{"${caller}::to_app"}  = sub {
         # setup
-        $xslates{$caller} = Text::Xslate->new(
+        my $xslate = Text::Xslate->new(
             syntax => 'TTerse',
             path => [ File::Spec->catfile($app_path, 'tmpl') ],
             module => ['Text::Xslate::Bridge::TT2Like'],
@@ -37,10 +35,10 @@ sub import {
             }
         };
 
-        sub {
+        my $app = sub {
             my $env = shift;
             if ( my $route = $caller->router->match($env) ) {
-                my $c = Tripel::Context->new(env => $env, 'caller' => $caller, app_path => $app_path, config => $config);
+                my $c = Tripel::Context->new(env => $env, 'caller' => $caller, app_path => $app_path, config => $config, tmpl => $xslate);
                 my $res = $route->{code}->($c, $route);
                 return $res->finalize();
             }
@@ -48,7 +46,8 @@ sub import {
                 my $content = 'not found';
                 return [404, ['Content-Length' => length($content)], [$content]];
             }
-        }
+        };
+        return $app;
     };
 }
 
@@ -66,18 +65,18 @@ has env      => ( is => 'ro', isa => 'HashRef', required => 1 );
 has caller   => ( is => 'ro', isa => 'Str',     required => 1 );
 has app_path => ( is => 'ro', isa => 'Str',     required => 1 );
 has config   => ( is => 'ro', isa => 'HashRef', required => 1 );
-
-sub xslate { shift->caller->xslate }
+has tmpl     => ( is => 'ro', isa => 'Object',  required => 1 )
+  ;    # any object supports Tiffany protocol
 
 sub render_with_fillin_form {
     my ($self, $tmpl, $args, $fdat) = @_;
-    my $html = $self->xslate->render($tmpl, $args);
+    my $html = $self->tmpl->render($tmpl, $args);
        $html = HTML::FillInForm::Lite->fill( \$html, $fdat );
     return $self->make_html_response($html);
 }
 sub render {
     my $self = shift;
-    my $html = $self->xslate->render(@_);
+    my $html = $self->tmpl->render(@_);
     return $self->make_html_response($html);
 }
 
