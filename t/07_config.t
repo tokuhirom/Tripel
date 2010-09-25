@@ -24,6 +24,7 @@ test_psgi app => $app,
         my $req = HTTP::Request->new(GET => 'http://localhost/?u=%E3%82%84%E3%83%BC');
         my $res = $cb->($req);
         is $res->code, 200;
+        diag $res->content if $res->code ne 200;
     };
 
 done_testing;
