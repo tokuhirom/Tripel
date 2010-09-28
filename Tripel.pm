@@ -62,6 +62,7 @@ use Encode qw/encode_utf8/;
 has req => (
     is      => 'ro',
     isa     => 'Tripel::Request',
+    lazy    => 1,
     default => sub { Tripel::Request->new( $_[0]->env ) }
 );
 has env      => ( is => 'ro', isa => 'HashRef', required => 1 );
