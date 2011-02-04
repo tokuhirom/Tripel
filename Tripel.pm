@@ -8,7 +8,7 @@ use File::Basename;
 use File::Spec;
 use 5.008001;
 
-our $VERSION='0.04';
+our $VERSION='0.05';
 
 our $CONTEXT;
 
