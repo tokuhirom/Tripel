@@ -58,6 +58,7 @@ package Tripel::Context;
 use Mouse;
 use HTML::FillInForm::Lite;
 use Encode qw/encode_utf8/;
+use JSON;
 
 has req => (
     is      => 'ro',
@@ -82,6 +83,20 @@ sub render {
     my $self = shift;
     my $html = $self->tmpl->render(@_);
     return $self->make_html_response($html);
+}
+
+sub render_json {
+    my ($self, $stuff) = @_;
+
+    my $json = encode_json($stuff);
+    return Tripel::Response->new(
+        200,
+        [
+            'Content-Length' => length($json),
+            'Content-Type'   => 'application/json; charset=utf-8'
+        ],
+        [$json]
+    );
 }
 
 sub make_html_response {
